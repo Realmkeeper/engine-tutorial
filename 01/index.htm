@@ -9,6 +9,12 @@ function addLine(elem,content){
 	c.appendChild(line);
 	line.scrollIntoView(); //Method to scroll new line into view
 }
+function interact(interaction){
+	if(interaction != null && interaction.length >= 1){
+		console.log(interaction);
+		addLine('console1',interaction);
+	}
+}
   </script>
   <style type="text/css">
 p {
@@ -19,7 +25,7 @@ margin:0;
 <body>
 
 <div id="console1" style="height:80px;width:350px;border:1px solid black;font-family:monospace;"></div>
-<button id="consoleInteract" onclick="javascript:var interaction = window.prompt('Output to console:');if(interaction != null && interaction.length >= 1){console.log(interaction);addLine('console1',interaction);}">Interact</button>
+<button id="consoleInteract" onclick="javascript:interact(window.prompt('Output to console:'));">Interact</button>
 
 <script type="text/javascript">
 //Prep DOM
