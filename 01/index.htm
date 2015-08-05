@@ -1,0 +1,37 @@
+<html>
+<head>
+  <script type="text/javascript">
+function addLine(elem,content){
+	var c = document.getElementById(elem);
+	var line = document.createElement('p');
+	line.setAttribute("id","p"+c.children.length);
+	line.innerHTML = content;
+	c.appendChild(line);
+	line.scrollIntoView(); //Method to scroll new line into view
+}
+function interact(interaction){
+	if(interaction != null && interaction.length >= 1){
+		console.log(interaction);
+		addLine('console1',interaction);
+	}
+}
+  </script>
+  <style type="text/css">
+p {
+margin:0;
+}
+  </style>
+</head>
+<body>
+
+<div id="console1" style="height:80px;width:350px;border:1px solid black;font-family:monospace;"></div>
+<button id="consoleInteract" onclick="javascript:interact(window.prompt('Output to console:'));">Interact</button>
+
+<script type="text/javascript">
+//Prep DOM
+var dev = document.getElementById("console1");
+dev.style.overflowY = "scroll";
+dev.style.maxHeight = dev.style.height || "200px";
+</script>
+</body>
+</html>
