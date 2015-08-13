@@ -1,5 +1,5 @@
 <html>
-<head>
+ <head>
   <script type="text/javascript">
 function addLine(elem,content){
 	var c = document.getElementById(elem);
@@ -21,26 +21,27 @@ p {
 margin:0;
 }
   </style>
-</head>
-<body>
+ </head>
+ <body>
 
-<div id="console1" style="height:80px;width:350px;border:1px solid black;font-family:monospace;"></div>
-<button id="consoleInteract" onclick="javascript:interact(window.prompt('Output to console:'));">Interact</button>
+  <div id="console1" style="height:80px;width:350px;border:1px solid black;font-family:monospace;"></div>
+  <button id="consoleInteract" onclick="javascript:interact(window.prompt('Output to console:'));">Interact</button>
 
-<script type="text/javascript">
+  <script type="text/javascript">
 //Prep DOM
 var dev = document.getElementById("console1");
 dev.style.overflowY = "scroll";
 dev.style.maxHeight = dev.style.height || "200px";
 
-//Check frequency of event firing
+//Demonstrate the frequency of event firing, and the keyCode associated with the event
 document.onkeypress = function(e){
 console.log(e);
-addLine('console1',"test");
+addLine('console1',"keyCode: "+e.keyCode);
 }
 document.onclick = function(e){
-console.log("click somewhere")
+console.log("CLICK!");
+addLine('console1',"CLICK!");
 }
-</script>
-</body>
+  </script>
+ </body>
 </html>
