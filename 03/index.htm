@@ -1,0 +1,86 @@
+<html>
+ <head>
+  <script type="text/javascript">
+function KeyBind(description,keyDown,keyUp,keyHold) {
+	this.keyCode = 0;
+	this.desc = description || "No description";
+	this.keyDown = keyDown || false;
+	this.keyUp = keyUp || false;
+	this.keyHold = keyHold || false;
+}
+
+function Bindings() {
+	this.keyBinding = new Array();
+	this.holdKeyCodes = new Array();
+	this.currentlyPressedKeys = {};
+}
+Bindings.prototype.requestKeyBind = function(keyCode,binding){
+	if(this.keyBinding[keyCode] == undefined){
+		this.keyBinding[keyCode] = binding;
+		binding.keyCode = keyCode;
+		if(binding.keyHold != false){this.holdKeyCodes.push(keyCode);}
+		return true;
+	} else {
+		//Resolution of multiple binds...
+		console.warn("BINDINGS","KeyCode already bound! - "+keyCode);
+		return false;
+	}
+}
+Bindings.prototype.triggerKeyDown = function(event){
+	if(this.keyBinding[event.keyCode]  != undefined && this.keyBinding[event.keyCode].keyDown != false){
+		this.keyBinding[event.keyCode].keyDown(event);
+	}
+}
+Bindings.prototype.triggerKeyHold = function(keyCode){
+	if(this.keyBinding[keyCode]  != undefined && this.keyBinding[keyCode].keyHold != false){
+		this.keyBinding[keyCode].keyHold(keyCode);
+	}
+}
+Bindings.prototype.triggerKeyUp = function(event){
+	if(this.keyBinding[event.keyCode]  != undefined && this.keyBinding[event.keyCode].keyUp != false){
+		this.keyBinding[event.keyCode].keyUp(event);
+	}
+}
+Bindings.prototype.toString = function(){
+	
+}
+
+var handleKeyDown = function(event){
+  // Handles Key Presses once on Key Down (Triggered multiple times at short intervals if key is held down, depending on browser)
+	if(bindings.currentlyPressedKeys[event.keyCode] != true){
+		bindings.currentlyPressedKeys[event.keyCode] = true;
+		bindings.triggerKeyDown(event);
+	}
+}
+var handleKeyUp = function(event){
+	if(bindings.currentlyPressedKeys[event.keyCode] == true){
+		bindings.currentlyPressedKeys[event.keyCode] = false;
+		bindings.triggerKeyUp(event);
+	}
+}
+var handleKeys = function(){
+  // Handles simultaneous Key Presses, and applies a consistent modifier every tick
+	// Should probably add something to clear the list if the window/tab loses focus so that all held keys are released if focus is lost
+	for(var i in bindings.holdKeyCodes){
+		var kc = bindings.holdKeyCodes[i];
+		if(bindings.currentlyPressedKeys[kc]){
+			bindings.triggerKeyHold(kc);
+		}
+	}
+}
+
+var bindings = new Bindings();
+document.onkeyup = handleKeyUp;
+document.onkeydown = handleKeyDown;
+
+//Add a demonstration KeyBind, to output to console when 'a' key is released
+bindings.requestKeyBind(65,new KeyBind("console output",false,function(e){console.info("Key was released.")},false));
+  </script>
+  <style type="text/css">
+
+  </style>
+ </head>
+ <body>
+ 
+ </body>
+</html>
