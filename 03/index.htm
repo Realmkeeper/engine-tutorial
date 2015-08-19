@@ -1,0 +1,101 @@
+<html>
+ <head>
+  <script type="text/javascript">
+var KEYCODE_MAPPING = new Array(
+	"","","","","","","","","backspace","tab","","","","enter","","","shift","ctrl","alt","pause/break",
+	"caps lock","","","","","","","escape","","","","","space","page up","page down","end","home","left arrow","up arrow","right arrow",
+	"down arrow","","","","","insert","delete","","0","1","2","3","4","5","6","7","8","9","","",
+	"","","","","","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+	"p","q","r","s","t","u","v","w","x","y","z","left window key","right window key","select key","","","numpad 0","numpad 1","numpad 2","numpad 3",
+	"numpad 4","numpad 5","numpad 6","numpad 7","numpad 8","numpad 9","multiply","add","","subtract","decimal point","divide","f1","f2","f3","f4","f5","f6","f7","f8",
+	"f9","f10","f11","f12","","","","","","","","","","","","","","","","",
+	"","","","","num lock","scroll lock","","","","","","","","","","","","","","",
+	"","","","","","","","","","","","","","","","","","","","",
+	"","","","","","","semi-colon","equal sign","comma","dash","period","forward slash","grave accent","","","","","","","",
+	"","","","","","","","","","","","","","","","","","","","open bracket",
+	"back slash","close bracket","single quote"
+);
+
+function KeyBind(description,keyDown,keyUp,keyHold) {
+	this.keyCode = 0;
+	this.desc = description || "No description";
+	this.keyDown = keyDown || false;
+	this.keyUp = keyUp || false;
+	this.keyHold = keyHold || false;
+}
+
+function Bindings() {
+	this.keyBinding = new Array();
+	this.holdKeyCodes = new Array();
+	this.currentlyPressedKeys = {};
+}
+Bindings.prototype.requestKeyBind = function(keyCode,binding){
+	if(this.keyBinding[keyCode] == undefined){
+		this.keyBinding[keyCode] = binding;
+		binding.keyCode = keyCode;
+		if(binding.keyHold != false){this.holdKeyCodes.push(keyCode);}
+		return true;
+	} else {
+		//Resolve binding collisions here...
+		console.warn("BINDINGS","KeyCode already bound! - "+keyCode);
+		return false;
+	}
+}
+Bindings.prototype.triggerKeyDown = function(event){
+	if(this.keyBinding[event.keyCode]  != undefined && this.keyBinding[event.keyCode].keyDown != false){
+		this.keyBinding[event.keyCode].keyDown(event);
+	}
+}
+Bindings.prototype.triggerKeyHold = function(keyCode){
+	if(this.keyBinding[keyCode]  != undefined && this.keyBinding[keyCode].keyHold != false){
+		this.keyBinding[keyCode].keyHold(keyCode);
+	}
+}
+Bindings.prototype.triggerKeyUp = function(event){
+	if(this.keyBinding[event.keyCode]  != undefined && this.keyBinding[event.keyCode].keyUp != false){
+		this.keyBinding[event.keyCode].keyUp(event);
+	}
+}
+Bindings.prototype.toString = function(){
+	//For you to optionally complete...
+}
+
+var handleKeyDown = function(event){
+  // Handles Key Presses once on Key Down (Triggered multiple times at short intervals if key is held down, depending on browser)
+	if(bindings.currentlyPressedKeys[event.keyCode] != true){
+		bindings.currentlyPressedKeys[event.keyCode] = true;
+		bindings.triggerKeyDown(event);
+	}
+}
+var handleKeyUp = function(event){
+	if(bindings.currentlyPressedKeys[event.keyCode] == true){
+		bindings.currentlyPressedKeys[event.keyCode] = false;
+		bindings.triggerKeyUp(event);
+	}
+}
+var handleKeys = function(){
+  // Handles simultaneous Key Presses, and applies a consistent modifier every tick
+	for(var i in bindings.holdKeyCodes){
+		var kc = bindings.holdKeyCodes[i];
+		if(bindings.currentlyPressedKeys[kc]){
+			bindings.triggerKeyHold(kc);
+		}
+	}
+}
+
+var bindings = new Bindings();
+document.onkeyup = handleKeyUp;
+document.onkeydown = handleKeyDown;
+
+//Added a demonstration KeyBind, to output to console when 'a' key is released (onKeyUp)
+bindings.requestKeyBind(65,new KeyBind("console output",false,function(e){console.info("Key was released.")},false));
+
+  </script>
+  <style type="text/css">
+/*There's no need for any styles in this example*/
+  </style>
+ </head>
+ <body>
+<!-- If you want to integrate the previous text interface, you'll need to add some content to the BODY -->
+ </body>
+</html>
