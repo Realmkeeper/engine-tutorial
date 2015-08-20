@@ -1,0 +1,30 @@
+<html>
+ <head>
+  <script type="text/javascript">
+//"use strict";
+//Uncomment the above line to invoke strict mode to the entire script
+
+//Variable scope, and proper declaration using the var keyword
+var foo = 1;
+bar = 2;
+var test = function(){
+	var foo = 3;
+	bar = 4;
+	console.log("Inside test()"," foo:",foo," bar:",bar);
+}
+//This will show the values of foo and bar as you defined them globally
+console.log("Before test()"," foo:",foo," bar:",bar);
+//This will show the values of foo and bar from within the test() function
+test();
+//This will show the values of foo and bar globally, after test() has been executed
+console.log("After test()"," foo:",foo," bar:",bar);
+
+  </script>
+  <style type="text/css">
+
+  </style>
+ </head>
+ <body>
+
+ </body>
+</html>
