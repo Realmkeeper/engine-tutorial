@@ -59,6 +59,19 @@ foo.bar = test4;
 console.log("Later defined, does bar() return foo's life? ",foo.bar() === foo.life);
 
 
+var test5 = {bar:function(){return this.a + this.b;}};
+var foo = Object.create(test5);
+foo.a = 4;
+foo.b = 2;
+console.log(foo.bar());
+
+var Test6 = function(){
+	this.a = 4;
+	this.b = 2;
+};
+var foo = new Test6();
+Test6.prototype.bar = function(){return this.a + this.b;};
+console.log(foo.bar());
 
   </script>
   <style type="text/css">
