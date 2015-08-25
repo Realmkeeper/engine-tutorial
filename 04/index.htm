@@ -19,6 +19,47 @@ test();
 //This will show the values of foo and bar globally, after test() has been executed
 console.log("After test()"," foo:",foo," bar:",bar);
 
+//In global context, this refers to the global object
+console.log("Is this.document identical to document? ",this.document === document);
+//In web browsers, the window object is also the global object
+console.log("Is this identical to window? ",this === window);
+
+
+function test2(){
+	return this;
+}
+//From within the context of test2, 'this' returns the global object
+console.log("test2() returns this as window ",test2() === window);
+
+function test3(){
+	"use strict";
+	return this;
+}
+//In strict mode, 'this' remains as it was when entering the execution context: undefined, in this case.
+console.log("test3() returns this as undefined ",test3() === undefined);
+
+
+var foo = {
+	life: 42,
+	bar: function(){
+		return this.life;
+	}
+};
+//From the context of a method of an object, 'this' refers to the object
+console.log("Does foo.bar() return the meaning of life? ",foo.bar());
+
+//Essentially the same as above, but define bar after foo, and attach it later
+var foo = {life: 42};
+function test4(){
+	return this.life;
+}
+foo.bar = test4;
+//Even if the function is attached to the object after definition, it only matters that the function
+// was invoked from the bar member of foo
+console.log("Later defined, does bar() return foo's life? ",foo.bar() === foo.life);
+
+
+
   </script>
   <style type="text/css">
 
